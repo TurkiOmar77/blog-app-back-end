@@ -20,7 +20,7 @@ export const authenticate =(
 
     try{
         const decoded = jwt.verify(token,JWT_SECRET) as JwtPayload
-        req.user = decoded
+        (req as any).user = decoded
         next()
     } catch (err){
         throw new ApiError(401, 'Unauthorized: Invalid token')

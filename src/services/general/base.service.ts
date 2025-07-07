@@ -1,11 +1,8 @@
 // src/utils/base.service.ts
-import { PrismaClient } from '@prisma/client'
+import prisma from "../../prisma/client"
 
-const prisma = new PrismaClient()
-
-// T هو اسم الموديل داخل prisma (مثلاً: 'user' أو 'post')
 export class BaseService<T extends keyof typeof prisma> {
-  private model: any
+  protected model: any
 
   constructor(model: T) {
     this.model = prisma[model]
@@ -15,9 +12,9 @@ export class BaseService<T extends keyof typeof prisma> {
     return this.model.create({ data })
   }
 
-  async findAll(where = {}, skip = 0, take = 10) {
+  async findAll(where = {}, skip = 0, take = 10 , include? : any , orderBy?:any) {
     const [data, total] = await Promise.all([
-      this.model.findMany({ where, skip, take }),
+      this.model.findMany({ where, skip, take , include , orderBy }),
       this.model.count({ where }),
     ])
     return {
@@ -26,8 +23,8 @@ export class BaseService<T extends keyof typeof prisma> {
     }
   }
 
-  async findById(id: number) {
-    return this.model.findUnique({ where: { id } })
+  async findById(id: number , include? :any ) {
+    return this.model.findUnique({ where: { id } , include })
   }
 
   async update(id: number, data: any) {
