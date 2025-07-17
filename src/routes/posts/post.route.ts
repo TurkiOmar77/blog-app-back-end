@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { PostController } from "../../controllers/posts/post.controller";
+import { authenticate } from "../../middlewares/authenticate.middleware";
 
 const router = Router()
 const postController = new PostController()
